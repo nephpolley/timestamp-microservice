@@ -25,25 +25,27 @@ app.get("/api/hello", function (req, res) {
 });
 
 
-app.get("/api/:date?", (req, res) => {
-  if (req.params.date) {
-    console.log("Input:", req.params.date);
-    let dateNumber = Number(req.params.date)
-    console.log(dateNumber)
-    let dateDate = new Date(req.params.date)
-    console.log(dateDate)
-    if (dateNumber) {
-      res.json({unix: dateNumber, utc: new Date(dateNumber)})
-    } else if (dateDate) {
-      res.json({unix: Math.floor(dateDate.getTime()), utc: dateDate})
-    } else {
-      res.json({error: "Invalid date"})
-    }
-  } else {
-    let currentDate = new Date();
-    res.json({unix: Number(currentDate), utc: currentDate })
-  }
+app.get("/api", (req, res) => {
+  var currentDate = new Date();
+  res.json({unix: currentDate.valueOf(), utc: currentDate.toUTCString()})
 })
+app.get("/api/:date?", (req, res) => {
+  var inputDate = req.params.date;
+  var resultDate;
+  if (! inputDate.includes("-")) {
+    inputDate = parseInt(inputDate)
+  }
+
+  resultDate = new Date(inputDate);
+  console.log(resultDate.toUTCString())
+
+  if (resultDate.valueOf() !== null) {
+    res.json({error: "Invalid Date"})
+  }
+
+  res.json({unix: resultDate.valueOf(), utc: resultDate.toUTCString()})
+})
+
 
 
 // Listen on port set in environment variable or default to 3000
