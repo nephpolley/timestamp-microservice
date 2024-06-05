@@ -41,7 +41,7 @@ app.get("/api/:date?", (req, res) => {
   resultDate = new Date(inputDate);
   console.log(resultDate)
 
-  if (resultDate.valueOf() === null) {
+  if (resultDate.valueOf() === null | resultDate.toUTCString() === "Invalid Date" ) {
     res.json({error: "Invalid Date"})
   }
 
