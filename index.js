@@ -32,20 +32,26 @@ app.get("/api", (req, res) => {
 
 app.get("/api/:date?", (req, res) => {
   var inputDate = req.params.date;
-  var resultDate;
-  if (! inputDate.includes("-")) {
-    inputDate = parseInt(inputDate)
-  }
-  console.log(inputDate)
 
-  resultDate = new Date(inputDate);
-  console.log(resultDate)
+  let isDate = Date.parse(inputDate)
+  let isUnixNumber = /^[0-9]+$/.test(inputDate)
 
-  if (resultDate.valueOf() === null | resultDate.toUTCString() === "Invalid Date" ) {
+  let resultDateUnix;
+  let resultDateUTC;
+
+  if (isDate) {
+    resultDateUnix = new Date(inputDate);
+    resultDateUTC = resultDateUnix.toUTCString();
+    res.json({unix: resultDateUnix.valueOf(), utc: resultDateUTC})
+  } else if (isUnixNumber) {
+    resultDateUnix = new Date(parseInt(inputDate));
+    resultDateUTC = resultDateUnix.toUTCString();
+    res.json({unix: resultDateUnix.valueOf(), utc: resultDateUTC})
+  } else {
     res.json({error: "Invalid Date"})
   }
 
-  res.json({unix: resultDate.valueOf(), utc: resultDate.toUTCString()})
+  
 })
 
 
