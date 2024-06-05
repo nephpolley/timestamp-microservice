@@ -29,17 +29,19 @@ app.get("/api", (req, res) => {
   var currentDate = new Date();
   res.json({unix: currentDate.valueOf(), utc: currentDate.toUTCString()})
 })
+
 app.get("/api/:date?", (req, res) => {
   var inputDate = req.params.date;
   var resultDate;
   if (! inputDate.includes("-")) {
     inputDate = parseInt(inputDate)
   }
+  console.log(inputDate)
 
   resultDate = new Date(inputDate);
-  console.log(resultDate.toUTCString())
+  console.log(resultDate)
 
-  if (resultDate.valueOf() !== null) {
+  if (resultDate.valueOf() === null) {
     res.json({error: "Invalid Date"})
   }
 
